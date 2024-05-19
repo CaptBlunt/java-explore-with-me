@@ -189,13 +189,13 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventsPage.getContent();
 
         events.forEach(event -> {
-            if (Boolean.TRUE.equals(endpointClient.getView(infoForStat.getUri(), infoForStat.getIp()).getBody())) {
+            infoForStat.setUri("/events/" + event.getId());
+            endpointClient.createEndpoint(infoForStat);
+
+            if (!Boolean.TRUE.equals(endpointClient.getView(infoForStat.getUri(), infoForStat.getIp()).getBody())) {
                 event.setViews(event.getViews() + 1);
                 eventRepository.save(event);
             }
-
-            infoForStat.setUri("/events/" + event.getId());
-            endpointClient.createEndpoint(infoForStat);
         });
 
         return eventMapper.fromPageEventToListEventDto(eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest));
