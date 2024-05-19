@@ -96,13 +96,13 @@ public class PublicController {
             throw new ValidateException("Параметр rangeEnd должен быть больше параметра rangeStart");
         }
 
-        /*EndpointForRequest endpointForRequest = new EndpointForRequest("EWMMainService", request.getRequestURI(),
-                request.getRemoteAddr(), LocalDateTime.now());*/
+        EndpointForRequest endpointForRequest = new EndpointForRequest("EWMMainService", request.getRequestURI(),
+                request.getRemoteAddr(), LocalDateTime.now());
 
         PublicFilterEvents filter = new PublicFilterEvents(text, categories, paid, rangeStart, rangeEnd, onlyAvailable);
 
         log.info("Пришёл GET запрос /events?" + request.getQueryString());
-        List<EventDto> response = eventService.searchForPublicController(filter, from, size, sort/*, endpointForRequest*/);
+        List<EventDto> response = eventService.searchForPublicController(filter, from, size, sort, endpointForRequest);
         log.info("отправлен ответ getAllEvents {}", response);
         return response;
     }
