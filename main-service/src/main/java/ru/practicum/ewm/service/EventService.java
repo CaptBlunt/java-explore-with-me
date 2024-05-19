@@ -23,7 +23,7 @@ public interface EventService {
 
     EventDto updateEventInitiator(Integer userId, Integer eventId, EventUpdate newEvent);
 
-    List<EventDto> searchForPublicController(PublicFilterEvents filter, Integer from, Integer size, String sort);
+    List<EventDto> searchForPublicController(PublicFilterEvents filter, Integer from, Integer size, String sort, EndpointForRequest infoForStat);
 
     List<EventDto> searchForAdminController(AdminFilterEvents filter, Integer from, Integer size);
 
