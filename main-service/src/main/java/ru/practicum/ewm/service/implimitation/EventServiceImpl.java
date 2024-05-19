@@ -189,10 +189,9 @@ public class EventServiceImpl implements EventService {
         List<Event> events = eventsPage.getContent();
 
         events.forEach(event -> {
-            if (Boolean.TRUE.equals(endpointClient.getView(infoForStat.getUri(), infoForStat.getIp()).getBody())) {
                 event.setViews(event.getViews() + 1);
                 eventRepository.save(event);
-            }
+
             endpointClient.createEndpoint(infoForStat);
         });
 
