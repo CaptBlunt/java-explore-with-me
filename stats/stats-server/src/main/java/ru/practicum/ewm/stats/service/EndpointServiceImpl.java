@@ -19,8 +19,13 @@ public class EndpointServiceImpl implements EndpointService {
     private final EndpointRepository endpointRepository;
     private final Mapper mapper;
 
+    public Boolean existRequest(String uri, String ip) {
+        return endpointRepository.findByUriAndIp(uri, ip).isEmpty();
+    }
+
     @Override
     public Endpoint saveEndpoint(Endpoint endpoint) {
+
         return endpointRepository.save(endpoint);
     }
 

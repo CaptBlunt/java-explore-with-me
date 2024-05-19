@@ -8,7 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
-import ru.practicum.ewm.client.stats.client.BaseClient;
+import ru.practicum.ewm.client.stats.client.StateClient;
 import ru.practicum.ewm.dto.stats.model.EndpointForRequest;
 
 import java.time.LocalDateTime;
@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Map;
 
 @Service
-public class EndpointClient extends BaseClient {
+public class EndpointClient extends StateClient {
 
     @Autowired
-    public EndpointClient(@Value("${main-service.url}") String serverUrl, RestTemplateBuilder builder) {
+    public EndpointClient(@Value("${stats-server.url}") String serverUrl, RestTemplateBuilder builder) {
         super(
                 builder
                         .uriTemplateHandler(new DefaultUriBuilderFactory(serverUrl))
@@ -29,8 +29,15 @@ public class EndpointClient extends BaseClient {
         );
     }
 
+
     public ResponseEntity<Object> createEndpoint(EndpointForRequest endpointForRequest) {
         return post(endpointForRequest);
+    }
+
+    public ResponseEntity<Object> getView(String uri, String ip) {
+        Map<String, Object> parameters = Map.of("uri", uri, "ip", ip);
+
+        return get("/view?uri=" + uri + "&ip=" + ip, parameters);
     }
 
     public ResponseEntity<Object> getEndpoints(@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime start, @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime end, List<String> uris, Boolean unique) {

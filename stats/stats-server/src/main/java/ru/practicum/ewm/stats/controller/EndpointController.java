@@ -38,8 +38,18 @@ public class EndpointController {
         if (uris == null) {
             uris = emptyList();
         }
+
         List<EndpointStat> statList = endpointService.getListStat(endpointService.getEndpoints(start, end, uris, unique));
         log.info("Отправлен ответ getListStat /stats с телом {}", statList);
+
         return statList;
+    }
+
+    @GetMapping(path = "/view")
+    public Boolean getEndpoints(@RequestParam String uri, @RequestParam String ip) {
+        log.info("Пришёл GET запрос /view?" + uri + "&" + ip);
+        Boolean response = endpointService.existRequest(uri, ip);
+        log.info("Отправлен ответ getEndpoints " + response);
+        return response;
     }
 }

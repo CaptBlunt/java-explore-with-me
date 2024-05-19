@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Map;
 
 
-public class BaseClient {
+public class StateClient {
 
     protected final RestTemplate restTemplate;
 
-    public BaseClient(RestTemplate restTemplate) {
+    public StateClient(RestTemplate restTemplate) {
         this.restTemplate = restTemplate;
     }
 

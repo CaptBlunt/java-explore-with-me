@@ -31,4 +31,9 @@ public class EndpointController {
 
         return client.getEndpoints(start, end, uris, unique);
     }
+
+    @GetMapping(path = "/view")
+    public ResponseEntity<Object> getEndpoints(@RequestParam String uri, @RequestParam String ip) {
+        return client.getView(uri, ip);
+    }
 }

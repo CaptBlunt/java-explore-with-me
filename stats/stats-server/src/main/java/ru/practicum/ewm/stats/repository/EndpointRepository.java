@@ -12,6 +12,10 @@ import java.util.List;
 public interface EndpointRepository extends JpaRepository<Endpoint, Integer> {
 
     @Query(value = "select * from endpoints " +
+            "where uri = ?1 and ip = ?2", nativeQuery = true)
+    List<Endpoint> findByUriAndIp(String uri, String ip);
+
+    @Query(value = "select * from endpoints " +
             "where date_of_request between ?1 and ?2", nativeQuery = true)
     List<Endpoint> findByDate(LocalDateTime start, LocalDateTime end);
 
