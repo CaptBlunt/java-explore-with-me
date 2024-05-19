@@ -175,8 +175,8 @@ public class EventServiceImpl implements EventService {
         return eventMapper.fromEntityToEventDto(eventRepository.save(eventMapper.fromEventUpdate(newEvent, event)));
     }
 
-    public List<EventDto> searchForPublicController(PublicFilterEvents filter, Integer from, Integer size, String sort,
-                                                    EndpointForRequest infoForStat) {
+    public List<EventDto> searchForPublicController(PublicFilterEvents filter, Integer from, Integer size, String sort/*,
+                                                    EndpointForRequest infoForStat*/) {
         if (sort.equals("EVENT_DATE")) {
             sort = "eventDate";
         } else {
@@ -185,16 +185,16 @@ public class EventServiceImpl implements EventService {
         PageRequest pageRequest = pagination.pagination(from, size, Sort.by(sort, "id").descending());
         List<Specification<Event>> specifications = specificationFilter.searchFilterEvent(filter);
 
-        Page<Event> eventsPage = eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest);
-        List<Event> events = eventsPage.getContent();
+        /*Page<Event> eventsPage = eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest);
+        List<Event> events = eventsPage.getContent();*/
 
-        events.forEach(event -> {
+        /*events.forEach(event -> {
             if (Boolean.TRUE.equals(endpointClient.getView(infoForStat.getUri(), infoForStat.getIp()).getBody())) {
                 event.setViews(event.getViews() + 1);
                 eventRepository.save(event);
             }
             endpointClient.createEndpoint(infoForStat);
-        });
+        });*/
 
         return eventMapper.fromPageEventToListEventDto(eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest));
     }

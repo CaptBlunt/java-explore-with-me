@@ -84,12 +84,4 @@ public class ErrorHandler {
 
         return new ErrorResponse(HttpStatus.CONFLICT, reason, e.getMessage(), LocalDateTime.now());
     }
-
-    /*@ExceptionHandler
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    public ErrorResponse unexpectedTypeException(final UnexpectedTypeException e) {
-        String reason = "Ошибка валидации";
-
-        return new ErrorResponse(HttpStatus.BAD_REQUEST, reason, "Значения категория должны быть больше 0", LocalDateTime.now());
-    }*/
 }
