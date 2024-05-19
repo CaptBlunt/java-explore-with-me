@@ -11,16 +11,14 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 
 import javax.validation.ConstraintViolation;
 import javax.validation.ConstraintViolationException;
-import javax.validation.UnexpectedTypeException;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 
 @RestControllerAdvice
 public class ErrorHandler {
 
     @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
-    public ErrorResponse DataIntegrityViolationException(final DataAccessException e) {
+    public ErrorResponse dataIntegrityViolationException(final DataAccessException e) {
         String reason = "Ошибка при выполнении операции с базой данных";
 
         return new ErrorResponse(HttpStatus.CONFLICT, reason, e.getMessage(), LocalDateTime.now());
