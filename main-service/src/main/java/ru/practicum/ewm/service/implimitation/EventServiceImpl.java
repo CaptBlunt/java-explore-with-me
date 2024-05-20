@@ -177,7 +177,29 @@ public class EventServiceImpl implements EventService {
 
     public List<EventDto> searchForPublicController(PublicFilterEvents filter, Integer from, Integer size, String sort,
                                                     EndpointForRequest infoForStat) {
-        if (sort.equals("EVENT_DATE")) {
+
+        String sortField = sort.equals("EVENT_DATE") ? "eventDate" : "views";
+
+        PageRequest pageRequest = pagination.pagination(from, size, Sort.by(sortField, "id").descending());
+
+        List<Specification<Event>> specifications = specificationFilter.searchFilterEvent(filter);
+
+        Page<Event> eventsPage = eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest);
+        //List<Event> events = eventsPage.getContent();
+
+        endpointClient.createEndpoint(infoForStat);
+
+        eventsPage.forEach(event -> {
+
+                if (!Boolean.TRUE.equals(endpointClient.getView(infoForStat.getUri(), infoForStat.getIp()).getBody())) {
+                    event.setViews(event.getViews() + 1);
+                    eventRepository.save(event);
+                }
+        });
+
+        return eventMapper.fromPageEventToListEventDto(eventsPage);
+
+        /*if (sort.equals("EVENT_DATE")) {
             sort = "eventDate";
         } else {
             sort = "views";
@@ -200,7 +222,7 @@ public class EventServiceImpl implements EventService {
         });
 
         return eventMapper.fromPageEventToListEventDto(eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest));
-    }
+*/    }
 
     public List<EventDto> searchForAdminController(AdminFilterEvents filter, Integer from, Integer size) {
         PageRequest pageRequest = pagination.pagination(from, size, Sort.by("id").descending());
