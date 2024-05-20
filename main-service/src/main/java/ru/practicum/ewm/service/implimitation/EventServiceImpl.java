@@ -198,6 +198,7 @@ public class EventServiceImpl implements EventService {
         });
 
         return eventMapper.fromPageEventToListEventDto(eventsPage);
+    }
 
         /*if (sort.equals("EVENT_DATE")) {
             sort = "eventDate";
@@ -222,7 +223,7 @@ public class EventServiceImpl implements EventService {
         });
 
         return eventMapper.fromPageEventToListEventDto(eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest));
-*/    }
+*/
 
     public List<EventDto> searchForAdminController(AdminFilterEvents filter, Integer from, Integer size) {
         PageRequest pageRequest = pagination.pagination(from, size, Sort.by("id").descending());
