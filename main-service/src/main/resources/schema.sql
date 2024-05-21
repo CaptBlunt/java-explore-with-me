@@ -6,6 +6,7 @@ DROP TABLE IF EXISTS locations CASCADE;
 DROP TABLE IF EXISTS categories CASCADE;
 DROP TABLE IF EXISTS requests CASCADE;
 DROP TABLE IF EXISTS compilation_events CASCADE;
+DROP TABLE IF EXISTS subscriptions CASCADE;
 
 CREATE TABLE IF NOT EXISTS users (
 id               INT GENERATED                    BY DEFAULT AS IDENTITY PRIMARY KEY,
@@ -52,8 +53,8 @@ title                VARCHAR
 );
 
 CREATE TABLE IF NOT EXISTS compilation_events (
-compilation_id       INTEGER                      NOT NULL,
-event_id             INTEGER                      NOT NULL,
+compilation_id       INT                      NOT NULL,
+event_id             INT                      NOT NULL,
 CONSTRAINT compilation_event_pk PRIMARY KEY(compilation_id, event_id),
 FOREIGN KEY (compilation_id) REFERENCES compilations (id),
 FOREIGN KEY (event_id) REFERENCES events (id)
@@ -67,3 +68,13 @@ requester            INT                          REFERENCES users(id),
 status               VARCHAR,
 UNIQUE(event_id, requester)
  );
+
+CREATE TABLE IF NOT EXISTS subscriptions (
+subscriber_id        INT                          NOT NULL,
+user_id              INT                          NOT NULL,
+CONSTRAINT subscriptions_pk PRIMARY KEY(subscriber_id, user_id),
+FOREIGN KEY (subscriber_id) REFERENCES users (id),
+FOREIGN KEY (user_id) REFERENCES users (id),
+UNIQUE(subscriber_id, user_id)
+);
+

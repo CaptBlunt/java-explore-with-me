@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import ru.practicum.ewm.dto.user.InitiatorDto;
 import ru.practicum.ewm.dto.user.NewUser;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.entity.User;
@@ -12,7 +13,10 @@ import ru.practicum.ewm.maper.UserMapper;
 import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
