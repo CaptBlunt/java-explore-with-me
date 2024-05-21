@@ -7,7 +7,6 @@ import ru.practicum.ewm.dto.user.NewUser;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.entity.User;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -56,7 +55,6 @@ public class UserMapper {
                 .map(this::fromUserToUserDto)
                 .collect(Collectors.toList());
     }
-
 
 
     public User fromUserDtoToUser(UserDto userDto) {
