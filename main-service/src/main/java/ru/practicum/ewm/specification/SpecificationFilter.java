@@ -44,6 +44,32 @@ public class SpecificationFilter {
         return specifications.stream().filter(Objects::nonNull).collect(Collectors.toList());
     }
 
+    public List<Specification<Event>> searchSubscribe(List<Integer> ids, Integer userId) {
+        List<Specification<Event>> specifications = new ArrayList<>();
+
+        specifications.add(ids == null ? searchPublishedEventWithOutParameters(userId) : searchPublishedEventWithParameters(ids, userId));
+
+        return specifications.stream().filter(Objects::nonNull).collect(Collectors.toList());
+    }
+
+    public Specification<Event> searchPublishedEventWithOutParameters(Integer userId) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate statePredicate = criteriaBuilder.equal(root.get("state"), EventStatus.PUBLISHED);
+            Predicate notInitiatorPredicate = criteriaBuilder.notEqual(root.get("initiator").get("id"), userId);
+
+            return criteriaBuilder.or(notInitiatorPredicate, statePredicate);
+        };
+    }
+
+    public Specification<Event> searchPublishedEventWithParameters(List<Integer> ids, Integer userId) {
+        return (root, query, criteriaBuilder) -> {
+            Predicate initiatorPredicate = criteriaBuilder.in(root.get("initiator").get("id")).value(ids);
+            Predicate statePredicate = criteriaBuilder.equal(root.get("state"), EventStatus.PUBLISHED);
+
+            return criteriaBuilder.or(initiatorPredicate, statePredicate);
+        };
+    }
+
     public Specification<Event> searchTextAnnotationAndDescription(String text) {
         return (root, query, criteriaBuilder) -> {
             String searchTextPattern = "%" + text.toLowerCase() + "%";

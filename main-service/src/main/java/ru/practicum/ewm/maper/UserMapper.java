@@ -7,6 +7,7 @@ import ru.practicum.ewm.dto.user.NewUser;
 import ru.practicum.ewm.dto.user.UserDto;
 import ru.practicum.ewm.entity.User;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -17,6 +18,7 @@ public class UserMapper {
         User user = new User();
         user.setName(newUser.getName());
         user.setEmail(newUser.getEmail());
+        user.setSubscribers(new ArrayList<>());
 
         return user;
     }
@@ -26,6 +28,7 @@ public class UserMapper {
         userDto.setId(user.getId());
         userDto.setName(user.getName());
         userDto.setEmail(user.getEmail());
+        userDto.setSubscribers(fromUserListToInitiatorDtoList(user.getSubscribers()));
 
         return userDto;
     }

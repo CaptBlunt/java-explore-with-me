@@ -3,6 +3,7 @@ package ru.practicum.ewm.entity;
 import lombok.*;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Getter
 @Setter
@@ -20,4 +21,9 @@ public class User {
     private String name;
 
     private String email;
+
+    @OneToMany
+    @JoinTable(name = "subscriptions", joinColumns = @JoinColumn(name = "subscriber_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
+    private List<User> subscribers;
 }
