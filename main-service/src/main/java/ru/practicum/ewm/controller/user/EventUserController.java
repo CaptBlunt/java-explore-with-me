@@ -8,9 +8,12 @@ import ru.practicum.ewm.dto.event.EventDto;
 import ru.practicum.ewm.dto.event.EventShortDto;
 import ru.practicum.ewm.dto.event.EventUpdate;
 import ru.practicum.ewm.dto.event.NewEvent;
+import ru.practicum.ewm.exception.ValidateException;
 import ru.practicum.ewm.service.implimitation.EventServiceImpl;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Slf4j
@@ -53,6 +56,23 @@ public class EventUserController {
         log.info("Пришёл GET запрос /users/{}/events/{}", userId, eventId);
         EventDto response = eventService.getEventByIdFromInitiator(userId, eventId);
         log.info("Отправлен ответ getEventCurrentUser {}", response);
+        return response;
+    }
+
+    @GetMapping(path = "/{userId}/events/subscriptions")
+    private List<EventDto> getEventsSubscriber(@PathVariable Integer userId, @RequestParam(required = false) List<Integer> subscriptionsIds,
+                                               @RequestParam(defaultValue = "0") @PositiveOrZero(message = "Значение from доложно быть положительным") Integer from,
+                                               @RequestParam(defaultValue = "10") @PositiveOrZero(message = "Значение size доложно быть положительным") Integer size,
+                                               HttpServletRequest request) {
+        log.info("Пришёл GET запрос /users/{}/events/subscriptions{}", userId, request.getQueryString());
+
+        if (subscriptionsIds != null && subscriptionsIds.contains(userId)) {
+            throw new ValidateException("Нельзя подписаться на себя");
+        }
+
+        List<EventDto> response = eventService.getEventsSubscribe(subscriptionsIds, userId, from, size);
+        log.info("Отправлен ответ getEventsSubscriber {}", response);
+
         return response;
     }
 }

@@ -12,4 +12,8 @@ public interface UserService {
     UserDto createUser(NewUser user);
 
     void deleteUser(Integer userId);
+
+    UserDto newSubscribe(Integer subscriberId, List<Integer> userId);
+
+    void deleteSubscribers(Integer userId, List<Integer> ids);
 }

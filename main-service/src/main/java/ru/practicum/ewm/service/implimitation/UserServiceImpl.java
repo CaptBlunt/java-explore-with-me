@@ -12,7 +12,10 @@ import ru.practicum.ewm.maper.UserMapper;
 import ru.practicum.ewm.repository.UserRepository;
 import ru.practicum.ewm.service.UserService;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -53,5 +56,34 @@ public class UserServiceImpl implements UserService {
         userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id = " + userId + " не найден"));
         userRepository.deleteById(userId);
+    }
+
+    @Override
+    public UserDto newSubscribe(Integer subscriberId, List<Integer> userId) {
+
+        User subscriber = userRepository.getReferenceById(subscriberId);
+        List<User> usersToSubscribe = userRepository.findByIds(userId);
+
+        List<User> currentSubscribers = subscriber.getSubscribers() != null ? subscriber.getSubscribers() : new ArrayList<>();
+
+        Set<Integer> currentSubscriberIds = currentSubscribers.stream()
+                .map(User::getId)
+                .collect(Collectors.toSet());
+
+        for (User user : usersToSubscribe) {
+            if (!currentSubscriberIds.contains(user.getId())) {
+                currentSubscribers.add(user);
+            }
+        }
+
+        subscriber.setSubscribers(currentSubscribers);
+        userRepository.save(subscriber);
+
+        return userMapper.fromUserToUserDto(subscriber);
+    }
+
+    @Override
+    public void deleteSubscribers(Integer userId, List<Integer> ids) {
+        userRepository.deleteSubscribers(userId, ids);
     }
 }

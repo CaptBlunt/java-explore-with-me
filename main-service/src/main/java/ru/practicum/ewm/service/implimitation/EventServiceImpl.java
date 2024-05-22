@@ -205,4 +205,11 @@ public class EventServiceImpl implements EventService {
         List<Specification<Event>> specifications = specificationFilter.searchFilterEventAdmin(filter);
         return eventMapper.fromPageEventToListEventDto(eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest));
     }
+
+    public List<EventDto> getEventsSubscribe(List<Integer> userIds, Integer userId, Integer from, Integer size) {
+        PageRequest pageRequest = pagination.pagination(from, size);
+
+        List<Specification<Event>> specifications = specificationFilter.searchSubscribe(userIds, userId);
+        return eventMapper.fromPageEventToListEventDto(eventRepository.findAll(specifications.stream().reduce(Specification::or).orElse(null), pageRequest));
+    }
 }
